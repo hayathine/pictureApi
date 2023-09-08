@@ -4,7 +4,8 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from .models import Base
 
 # DB情報
-user_name = "ryo"
+# user_name = "ryo"
+user_name = "root"
 password = "password"
 host = "localhost"
 database_name = "picture_db"
@@ -27,6 +28,7 @@ engine = create_engine(
 sessionLocal = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
+
 # DBが存在しない場合は作成する
 if  not database_exists(engine.url):
     create_database(engine.url)

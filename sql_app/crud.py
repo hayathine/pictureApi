@@ -31,8 +31,18 @@ def get_pictures_by_user_id(db: Session, user_id: int):
 def get_picture_by_user_id_and_picture_id(db: Session, user_id: int, picture_id: int):
     return db.query(models.Pictures).filter(models.Pictures.owner_id == user_id).filter(models.Pictures.picure_id == picture_id).first()
 
+# ユーザー情報を変更する関数
+def update_user(db: Session, user_id: int, user: schemas.UserUpdate):
+    db_user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
+    db_user.name = user.name
+    db_user.email = user.email
+    db_user.hashed_password = user.password
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
 # ユーザーを削除する関数
 def delete_user(db: Session,user_id: int):
     delete_user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
-    db.delete(delete_user)
+    delete_user.is_active = 0
     db.commit()

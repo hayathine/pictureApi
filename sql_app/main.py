@@ -45,14 +45,20 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="User already exists")
     return crud.create_user(db=db, user=user)
 
+# ユーザー情報を変更するAPI
 @app.put("/user")
-async def update_user():
-    pass
+async def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
+    db_user = crud.update_user(db, user_id=user_id, user=user)
+    # if db_user is None:
+        # raise HTTPException(status_code=404, detail="User not found")
+    return db_user
 
 # ユーザーを削除するAPI
 @app.delete("/user")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    crud.delete_user(user_id)
+    # if crud.get_user_by_id(db, user_id) is None:
+    #     raise HTTPException(status_code=404, detail="User not found")
+    crud.delete_user(db, user_id)
     
 
 @app.get("/user/{user_id}")

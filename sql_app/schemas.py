@@ -19,6 +19,10 @@ class UserCreate(UserBase):
     email: str
     password: str
 
+class UserUpdate(UserBase):
+    email: str
+    password: str
+
 class User(UserBase):
     user_id: int
     is_active: bool

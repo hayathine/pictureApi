@@ -31,7 +31,7 @@ sessionLocal = scoped_session(
 if  not database_exists(engine.url):
     create_database(engine.url)
 # テーブル作成
-    Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 # DB接続用のセッションクラス、インスタンスが作成されるとDBに接続される
 Base.query = sessionLocal.query_property()

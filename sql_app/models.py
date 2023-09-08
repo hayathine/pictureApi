@@ -19,5 +19,5 @@ class Pictures(Base):
     file_name = Column(String(255))
     title = Column(String(255), index=True)
     description = Column(String(255))
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner_id = Column(Integer, ForeignKey("users.user_id"))
     owner = relationship("Users", back_populates="picures")

@@ -49,29 +49,45 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @app.put("/user")
 async def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
     db_user = crud.update_user(db, user_id=user_id, user=user)
-    # if db_user is None:
-        # raise HTTPException(status_code=404, detail="User not found")
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
 # ユーザーを削除するAPI
 @app.delete("/user")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    # if crud.get_user_by_id(db, user_id) is None:
-    #     raise HTTPException(status_code=404, detail="User not found")
+    if crud.get_user_by_id(db, user_id) is None:
+        raise HTTPException(status_code=404, detail="User not found")
     crud.delete_user(db, user_id)
     
 
+# ユーザーIDを指定してユーザー情報を取得するAPI
 @app.get("/user/{user_id}")
-async def get_user_by_id(user_id: int):
-    pass
+async def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_id(db, user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
+    
+# ユーザーIDに紐づいたすべての画像を取得するAPI
+@app.get("/picture/", response_model=List[schemas.Picture])
+async def get_pictures(owner_id,skip=0, limit=100, db: Session = Depends(get_db)):
+    # ユーザーIDが存在するか確認する
+    db_user = crud.get_user_by_id(db, owner_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    db_pictures = crud.get_pictures(db=db, owner_id=owner_id, skip=skip, limit=limit)
+    return db_pictures
 
-@app.get("/picture/")
-async def get_picture():
-    pass
-
-@app.post("/picture/")
-async def create_picture():
-    pass
+# 画像情報を作成するAPI
+@app.post("/picture/", response_model=schemas.Picture)
+async def create_picture(picture: schemas.PictureCreate, db: Session = Depends(get_db)):
+    # ユーザーIDが存在するか確認する
+    db_user = crud.get_user_by_id(db, picture.owner_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return crud.create_picture(db=db, picture=picture)
+    
 
 @app.get("/picture/{picture_id}")
 async def get_picture_by_id(picture_id: int):

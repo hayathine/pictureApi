@@ -15,7 +15,7 @@ class Users(Base):
 
 class Pictures(Base):
     __tablename__ = "pictures"
-    picure_id = Column(Integer, primary_key=True, index=True)
+    picure_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     file_name = Column(String(255))
     title = Column(String(255), index=True)
     description = Column(String(255))

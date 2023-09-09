@@ -9,8 +9,13 @@ class UserBase(BaseModel):
 class PictureBase(BaseModel):
     file_name: str
     title: str
-    description: str
     owner_id: int
+
+class PictureCreate(PictureBase):
+    description: Optional[str] = None
+
+class Picture(PictureBase):
+    picture_id: int
 
     class Config:
         orm_mode = True

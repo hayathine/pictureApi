@@ -71,7 +71,7 @@ async def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     
 # ユーザーIDに紐づいたすべての画像を取得するAPI
 @app.get("/picture/", response_model=List[schemas.Picture])
-async def get_pictures(owner_id,skip=0, limit=100, db: Session = Depends(get_db)):
+def get_pictures(owner_id,skip=0, limit=100, db: Session = Depends(get_db)):
     # ユーザーIDが存在するか確認する
     db_user = crud.get_user_by_id(db, owner_id)
     if db_user is None:

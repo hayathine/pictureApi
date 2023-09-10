@@ -1,24 +1,24 @@
 # pydanticのためのスキーマを定義するファイル
 
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class UserBase(BaseModel):
     name: str
 
 class PictureBase(BaseModel):
-    file_name: str
-    title: str
-    owner_id: int
+    file_name:str = Field( max_length=100)
+    title:str = Field( max_length=100)
+    owner_id:int = Field(gt=0)
 
 class PictureCreate(PictureBase):
-    description: Optional[str] = None
+    description:str = Field(max_length=100)
 
 class Picture(PictureBase):
-    picture_id: int
-
-    class Config:
-        orm_mode = True
+    picture_id: int = Field(gt=0)
+    # from_attributes = Trueを指定することで、モデルの属性をそのままスキーマにすることができる
+    class ConfigDict:
+        from_attributes = True
 
 class UserCreate(UserBase):
     email: str
@@ -33,5 +33,5 @@ class User(UserBase):
     is_active: bool
     pictures: List[PictureBase] = []
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True

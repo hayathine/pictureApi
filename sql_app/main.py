@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from typing import List
-from routers import users, pictures
 import sys
 sys.path.append("~/sql_app")
+from routers import users, pictures
 import crud, models, schemas, database
 
 import uvicorn
@@ -41,4 +41,4 @@ async def confirm_oauth2(token: str = Depends(oauth2_scheme)):
     return {"token": token}
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, host="127.0.0.1", port=8080)
+    uvicorn.run(app, reload=True)

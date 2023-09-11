@@ -4,8 +4,7 @@ from typing import List
 import sys
 sys.path.append("~/sql_app")
 import crud, models, schemas, database
-
-router = APIRouter()
+from common import Hash
 
 def get_db():
     db = database.sessionLocal()
@@ -13,6 +12,12 @@ def get_db():
         yield db
     finally:
         db.close()
+
+router = APIRouter(
+    prefix="/user", 
+    tags=["user"],
+    )
+
 
 # ユーザー一覧を取得するAPI
 @router.get("/user/", response_model=List[schemas.User])
@@ -26,6 +31,9 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="User already exists")
+    # パスワードをハッシュ化する
+    user.password = Hash.encodeHashPassword(user.password)
+
     return crud.create_user(db=db, user=user)
 
 # ユーザー情報を変更するAPI

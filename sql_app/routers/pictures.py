@@ -5,7 +5,10 @@ import sys
 sys.path.append("~/sql_app")
 import crud, models, schemas, database
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/picture", 
+    tags=["picture"]
+    )
 
 def get_db():
     db = database.sessionLocal()
@@ -15,7 +18,7 @@ def get_db():
         db.close()
 
 # ユーザーIDに紐づいたすべての画像を取得するAPI
-@router.get("/picture/{user_id}", response_model=List[schemas.Picture])
+@router.get("/{user_id}", response_model=List[schemas.Picture])
 def get_pictures(user_id: int,skip=0, limit=100, db: Session = Depends(get_db)):
     # ユーザーIDが存在するか確認する
     db_user = crud.get_user_by_id(db, user_id)
@@ -25,7 +28,7 @@ def get_pictures(user_id: int,skip=0, limit=100, db: Session = Depends(get_db)):
     return db_pictures
 
 # 画像情報を作成するAPI
-@router.post("/picture/", response_model=schemas.Picture)
+@router.post("/", response_model=schemas.Picture)
 async def create_picture(picture: schemas.PictureCreate, db: Session = Depends(get_db)):
     # ユーザーIDが存在するか確認する
     db_user = crud.get_user_by_id(db, picture.owner_id)
@@ -34,7 +37,7 @@ async def create_picture(picture: schemas.PictureCreate, db: Session = Depends(g
     return crud.create_picture(db=db, picture=picture)
     
 
-@router.get("/picture/{user_id}/{picture_id}", response_model=schemas.Picture)
+@router.get("/{user_id}/{picture_id}", response_model=schemas.Picture)
 async def get_picture_by_id(user_id:int, picture_id: int, db: Session = Depends(get_db)):
     # ユーザーIDが存在するか確認する
     db_user = crud.get_user_by_id(db, user_id)

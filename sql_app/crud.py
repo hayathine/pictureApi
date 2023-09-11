@@ -1,8 +1,6 @@
 from sqlalchemy.orm import Session
 
-from . import models
-from . import schemas
-from . import crud_log
+import models, schemas, crud_log
 
 #　ロガーの設定
 logger = crud_log.get_logger(__name__)

@@ -7,6 +7,6 @@ def get_logger(name):
 #ストリームハンドラーの作成
     handler = StreamHandler()
     handler.setLevel(INFO)
-    handler.setFormatter(Formatter("%(message)s"))
-
+    handler.setFormatter(Formatter("---- %(asctime)s - %(name)s - %(levelname)s - %(message)s ----"))
     logging.basicConfig(level=INFO, handlers=[handler])
+    logging.info("[logger set up]")

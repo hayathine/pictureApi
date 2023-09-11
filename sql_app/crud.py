@@ -9,6 +9,23 @@ logger = crud_log.get_logger(__name__)
 
 # 全ユーザーを取得する関数
 def get_users(db: Session, skip: int = 0, limit: int = 100):
+    """
+    全ユーザーを取得する関数
+    Parameters
+    ----------
+    db : Session
+        SQLAlchemyのセッション
+    skip : int, optional
+        取得するユーザーの開始位置, by default 0
+    limit : int, optional
+        取得するユーザーの数, by default 100
+    Returns
+    -------
+    db_users : List[models.Users]
+        ユーザー情報のリスト
+    """
+    logger
+
     return db.query(models.Users).offset(skip).limit(limit).all()
 
 def get_user_by_email(db: Session, email: str):
@@ -25,6 +42,7 @@ def get_user_by_email(db: Session, email: str):
     db_user : models.Users
         ユーザー情報
     """
+    logger
     return db.query(models.Users).filter(models.Users.email == email).first()
 
 def get_user_by_id(db: Session, user_id: int):
@@ -41,6 +59,8 @@ def get_user_by_id(db: Session, user_id: int):
     db_user : models.Users
         ユーザー情報
     """
+    logger
+    logger
     return db.query(models.Users).filter(models.Users.user_id == user_id).first()
 
 def create_user(db: Session, user: schemas.UserCreate):
@@ -57,6 +77,7 @@ def create_user(db: Session, user: schemas.UserCreate):
     db_user : models.Users
         作成したユーザー情報
     """ 
+    logger
     db_user = models.Users(name=user.name, email=user.email, hashed_password=user.password)
     db.add(db_user)
     db.commit()
@@ -67,20 +88,63 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 # 特定のユーザーの特定の写真を取得する関数
 def get_picture_by_user_id_and_picture_id(db: Session, user_id: int, picture_id: int):
-    return db.query(models.Pictures).filter(models.Pictures.owner_id == user_id).filter(models.Pictures.picure_id == picture_id).first()
+    """
+    特定のユーザーの特定の写真を取得する関数
+    Parameters
+    ----------
+    db : Session
+        SQLAlchemyのセッション
+    user_id : int
+        ユーザーID
+    picture_id : int
+        画像ID
+    Returns
+    -------
+    db_picture : models.Pictures
+        画像情報
+    """
+    logger
+    return db.query(models.Pictures).filter(models.Pictures.owner_id == user_id).filter(models.Pictures.picture_id == picture_id).first()
 
 # ユーザー情報を変更する関数
 def update_user(db: Session, user_id: int, user: schemas.UserUpdate):
+    """
+    ユーザー情報を変更する関数
+    Parameters
+    ----------
+    db : Session
+        SQLAlchemyのセッション
+    user_id : int
+        ユーザーID
+    user : schemas.UserUpdate
+        ユーザー情報
+    Returns
+    -------
+    db_user : models.Users
+        変更したユーザー情報
+    """
+    logger
     db_user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
     db_user.name = user.name
     db_user.email = user.email
     db_user.hashed_password = user.password
+    db_user.is_active = user.is_active
     db.commit()
     db.refresh(db_user)
     return db_user
 
 # ユーザーを削除する関数
 def delete_user(db: Session,user_id: int):
+    """
+    ユーザーを削除する関数
+    Parameters
+    ----------
+    db : Session
+        SQLAlchemyのセッション
+    user_id : int
+        ユーザーID
+    """
+    logger
     delete_user = db.query(models.Users).filter(models.Users.user_id == user_id).first()
     delete_user.is_active = 0
     db.commit()
@@ -103,6 +167,7 @@ def get_pictures(db: Session, owner_id:int, skip: int = 0, limit: int = 100):
     db_pictures : List[models.Pictures]
         画像情報のリスト
     """
+    logger
     return db.query(models.Pictures).filter(models.Pictures.owner_id == owner_id).offset(skip).limit(limit).all()
 
 def create_picture(db: Session, picture: schemas.PictureCreate):
@@ -119,7 +184,7 @@ def create_picture(db: Session, picture: schemas.PictureCreate):
     db_picture : models.Pictures
         作成した画像情報
     """
-    # logger.info("create_picture")   
+    logger
     db_picture = models.Pictures(file_name=picture.file_name, title=picture.title, description=picture.description, owner_id=picture.owner_id)
     db.add(db_picture)
     db.commit()

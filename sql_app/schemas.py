@@ -14,6 +14,7 @@ class PictureBase(BaseModel):
 class PictureCreate(PictureBase):
     description:str = Field(max_length=100)
 
+
 class Picture(PictureBase):
     picture_id: int = Field(gt=0)
     # from_attributes = Trueを指定することで、モデルの属性をそのままスキーマにすることができる
@@ -27,6 +28,7 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     email: str
     password: str
+    is_active: bool
 
 class User(UserBase):
     user_id: int

@@ -4,8 +4,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from .models import Base
 
 # DB情報
-# user_name = "ryo"
-user_name = "root"
+user_name = "ryo"
 password = "password"
 host = "localhost"
 database_name = "picture_db"

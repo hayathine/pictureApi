@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-from database import Access_DB
+from databases.database import Access_DB
 import sys
 sys.path.append("~/sql_app")
-import crud, models, schemas, database
+from cruds import crud
+from schemas import schemas
 
 router = APIRouter(
     prefix="/picture", 

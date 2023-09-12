@@ -3,10 +3,11 @@ from sqlalchemy.orm import Session
 from typing import List
 import sys
 sys.path.append("~/sql_app")
-from database import Access_DB
-import crud, models, schemas, database
+from databases.database import Access_DB
+from cruds import crud
+from schemas import schemas
 
-from common import Hash
+from services.common import Hash
 
 router = APIRouter(
     prefix="/user", 

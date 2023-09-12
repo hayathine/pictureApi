@@ -5,12 +5,13 @@ from sqlalchemy.orm import Session
 from typing import List, Annotated
 from dotenv import load_dotenv
 from datetime import timedelta
-from common import Hash, Access_token, ACCES_TOKEN_EXPIRE_MINUTES
+from services.common import Hash, Access_token, ACCES_TOKEN_EXPIRE_MINUTES
 import os
 import sys
 sys.path.append("~/sql_app")
-from database import Access_DB
-import crud, models, schemas, database
+from databases.database import Access_DB
+from cruds import crud
+from schemas import schemas
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -64,9 +65,10 @@ async def get_active_user(
 async def confirm_oauth2(token: Annotated[str, Depends(oauth2_scheme)]):
     return {"token": token}
 
-@router.get("/user/")
-async def read_user(current_user: Annotated[schemas.Login_user, Depends(get_active_user)]):
-    return current_user
+#TODO: ここでエラーが出る
+# @router.get("/user/")
+# async def read_user(current_user: Annotated[schemas.Login_user, Depends(get_active_user)]):
+#     return current_user
 
 @router.post("/token", response_model=schemas.Token)
 def login_for_access_token(

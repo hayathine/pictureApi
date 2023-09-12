@@ -1,12 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
-from typing import List
 import sys
 sys.path.append("~/sql_app")
 from routers import users, pictures, login
-import crud, models, schemas, database
 import uvicorn
 
 app = FastAPI()

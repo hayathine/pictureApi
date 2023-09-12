@@ -24,7 +24,7 @@ class Hash():
 
 class Access_token():
     @staticmethod
-    def create_access_token(data: dict, expires_delta: timedelta):
+    def create_access_token(data: dict, expires_delta: timedelta, secret_key: str = SECRET_KEY, algorithm: str = ALGORITHM):
         # 有効期限を設定
         expire = datetime.utcnow() + expires_delta
         # jwt.encode(データ, 秘密鍵, アルゴリズム)

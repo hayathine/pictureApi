@@ -38,6 +38,10 @@ class User(UserBase):
     class ConfigDict:
         from_attributes = True
 
+class Login_user(UserBase):
+    email: str
+    password: str
+
 class Token(BaseModel):
     access_token: str
     token_type: str

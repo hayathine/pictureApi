@@ -43,6 +43,23 @@ def get_user_by_email(db: Session, email: str):
     logger
     return db.query(models.Users).filter(models.Users.email == email).first()
 
+def get_current_user_by_email(db: Session, email: str):
+    """
+    メールアドレスからユーザーを取得する関数
+    Parameters
+    ----------
+    db : Session
+        SQLAlchemyのセッション
+    email : str
+        メールアドレス
+    Returns
+    -------
+    db_user : models.Users
+        ユーザー情報
+    """
+    logger
+    return db.query(models.Users).filter(models.Users.email == email).filter(models.Users.is_active == 1).first()
+
 def get_user_by_id(db: Session, user_id: int):
     """
     IDからユーザーを取得する関数

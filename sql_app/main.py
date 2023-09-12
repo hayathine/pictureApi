@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List
 import sys
 sys.path.append("~/sql_app")
-from routers import users, pictures
+from routers import users, pictures, login
 import crud, models, schemas, database
 
 import uvicorn
@@ -14,6 +14,7 @@ app = FastAPI()
 
 app.include_router(users.router)
 app.include_router(pictures.router)
+app.include_router(login.router)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -41,4 +42,4 @@ async def confirm_oauth2(token: str = Depends(oauth2_scheme)):
     return {"token": token}
 
 if __name__ == "__main__":
-    uvicorn.run(app, reload=True)
+    uvicorn.run(app)

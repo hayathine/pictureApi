@@ -37,3 +37,7 @@ class User(UserBase):
 
     class ConfigDict:
         from_attributes = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

@@ -16,13 +16,6 @@ router = APIRouter(
     tags=["login"]
     )
 
-def get_db():
-    db = database.sessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 def authorize_user(db: Session, username: str, password: str):
     """
     ユーザー認証を行う関数
@@ -45,7 +38,7 @@ async def confirm_oauth2(token: Annotated[str, Depends(oauth2_scheme)]):
 @router.post("/token", response_model=schemas.Token)
 def login_for_access_token(
     form: Annotated[OAuth2PasswordRequestForm, Depends()],
-    db: Session = Depends(get_db)
+    db: Session = Depends(database.get_db)
     ):
     # ユーザー認証を行う
     user = authorize_user(db, username=form.username, password=form.password)

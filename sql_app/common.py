@@ -1,16 +1,17 @@
 from jose import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
 import bcrypt
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-ALGORITHM = "HS256"
-SECRET_KEY = "secret"
-ACCES_TOKEN_EXPIRE_MINUTES = 30
+ALGORITHM = os.getenv("ALGORITHM")
+SECRET_KEY = os.getenv("SECRET_KEY")
+ACCES_TOKEN_EXPIRE_MINUTES = os.getenv("ACCES_TOKEN_EXPIRE_MINUTES")
 
 # 
 class Hash():
-
     # create hash password
     @staticmethod
     def encodeHashPassword(plain_password):

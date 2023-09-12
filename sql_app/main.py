@@ -7,7 +7,6 @@ import sys
 sys.path.append("~/sql_app")
 from routers import users, pictures, login
 import crud, models, schemas, database
-
 import uvicorn
 
 app = FastAPI()
@@ -29,13 +28,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-def get_db():
-    db = database.sessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.get("/")
 async def confirm_oauth2(token: str = Depends(oauth2_scheme)):

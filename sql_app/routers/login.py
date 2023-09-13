@@ -43,7 +43,7 @@ def authorize_user(db: Session , username: str, password: str):
         return False
     return user
 
-async def get_active_user(
+def get_active_user(
     authorize_user: Annotated[schemas.Login_user, Depends(authorize_user)]
     ):
     """
@@ -65,10 +65,10 @@ async def get_active_user(
 async def confirm_oauth2(token: Annotated[str, Depends(oauth2_scheme)]):
     return {"token": token}
 
-#TODO: ここでエラーが出る
-# @router.get("/user/")
-# async def read_user(current_user: Annotated[schemas.Login_user, Depends(get_active_user)]):
-#     return current_user
+@router.get("/user/")
+def read_user(current_user: schemas.User):
+    active_user = get_active_user(current_user)
+    return active_user
 
 @router.post("/token", response_model=schemas.Token)
 def login_for_access_token(

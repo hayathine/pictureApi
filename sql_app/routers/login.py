@@ -12,6 +12,7 @@ sys.path.append("~/sql_app")
 from databases.database import Access_DB
 from cruds import crud
 from schemas import schemas
+from schemas.schemas import Login_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -76,16 +77,20 @@ def login_for_access_token(
     db: Session = Depends(Access_DB.get_db)
     ):
     # ユーザー認証を行う
-    user = authorize_user(db, username=form.username, password=form.password)
-    if user is None:
+    user_dict= authorize_user(db, username=form.username, password=form.password)
+
+    if not user_dict:
         raise HTTPException(
             status_code=400,
             detail="Incorrect username or password",
         )
+    # user = Login_user(**user_dict)
     # アクセストークンを作成する
-    token = Access_token.create_access_token(
-        {"sub": user.email},
-        expires_delta=timedelta(minutes=float(os.getenv("ACCES_TOKEN_EXPIRE_MINUTES"))),
-        secret_key=os.getenv("SECRET_KEY")
-    )
-    return schemas.Token(access_token=token, token_type="bearer")
+    # token = Access_token.create_access_token(
+    #     # TODO ここでエラーが出る
+    #     {"sub": user.email},
+    #     expires_delta=timedelta(minutes=float(os.getenv("ACCES_TOKEN_EXPIRE_MINUTES"))),
+    #     secret_key=os.getenv("SECRET_KEY")
+    # )
+
+    return {"access_token":user_dict.name, "token_type":"bearer"}

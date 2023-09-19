@@ -40,7 +40,7 @@ class User(UserBase):
 
 class Login_user(UserBase):
     email: str
-    password: str
+    hashed_password: str
 
 class Token(BaseModel):
     access_token: str

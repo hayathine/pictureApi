@@ -5,8 +5,9 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
-            "name": "Python: FastAPI",
+            "name": "Python: FastAPI TEST",
             "program": "${workspaceFolder}/sql_app/main.py",
             "request": "launch",
             "type": "python",

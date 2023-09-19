@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.engine.url import URL
 from dotenv import load_dotenv
 import os
 from models.models import Base
@@ -13,7 +14,7 @@ password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
 database_name = os.getenv("DATABASE_NAME")
 
-SQLALCHEMY_DATABASE_URL = "mysql://%s:%s@%s/%s?charset=utf8" % (
+SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://%s:%s@%s/%s?charset=utf8" % (
     user_name,
     password,
     host,
